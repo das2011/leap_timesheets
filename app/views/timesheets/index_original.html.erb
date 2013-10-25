@@ -1,0 +1,394 @@
+<html>
+	<head>
+	    <style type="text/css">
+			body {
+				font-size:larger;
+				font-family:'Verdana';
+			}
+		
+		</style>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+		<%= javascript_include_tag "jquery.js" %>
+		<%= javascript_include_tag "leap.js" %>
+		<script>
+			  var pausedFrame = null;
+			  var latestFrame = null;
+			  var day_index = 0;
+			  window.onkeypress = function(e) {
+				if (e.charCode == 32) {
+				  if (pausedFrame == null) {
+					pausedFrame = latestFrame;
+				  } else {
+					pausedFrame = null;
+				  }
+				}
+			  };
+			  
+			  function getCurrentInput(){
+				hour_inputs = $('input.hours');
+				var hours_input = hour_inputs[current_index];
+				return hours_input;
+			  }
+			  
+			  function increaseHours(progress){
+			      hours_input = getCurrentInput();
+				  var current_value = hours_input.val();
+				  console.log("increase Hours value: " + current_value);
+				  if(current_value < 25){
+					  var new_value = parseInt(current_value) + 1;
+					  hours_input.val(new_value);
+				  }
+			  };
+			  
+			  function decreaseHours(progress){
+				  var current_value = hours_input.val();
+				  console.log("decrease hours: " + current_value);
+				  if(current_value > 0){
+					  var new_value = parseInt(current_value) - 1;
+					  hours_input.val(new_value);
+				  }
+			  }
+			  var controller = new Leap.Controller({enableGestures: true});
+			  
+			  var swiper = controller.gesture('swipe');
+			  var circler = controller.gesture('circle');
+			  var previous_progress = 0;
+			  
+			   swiper.update(function(g) {
+					console.log("we got a swiper! " + g);
+     			});	
+
+               circler.update(function(g) {
+					//console.log("we got a CIRCLE!" + g);
+					last_circle_gesture = g.lastGesture;
+					var progress = parseInt(last_circle_gesture.progress);
+					console.log("progress: " + progress);
+					
+					var direction_of_pointable = g.frames[0].pointables[0].direction;
+					var direction_of_circle_normal = last_circle_gesture.normal;
+					
+					var clockwise = Leap.vec3.dot(direction_of_pointable, direction_of_circle_normal) > 0;
+					
+					if(progress > previous_progress){
+						if(clockwise){
+							increaseHours(progress);
+						}
+						else
+						{
+							decreaseHours(progress);
+						}
+					}
+					previous_progress = progress;
+               });	   
+			  
+			  controller.loop(function(frame) {
+				latestFrame = frame;
+				
+				if(frame.gestures.length > 0){
+					//document.getElementById('out').innerHTML = "<div>" + latestFrame.gestures + "</div>";
+				}
+			  });
+			  controller.on('ready', function() {
+				console.log("ready");
+			  });
+			  controller.on('connect', function() {
+				console.log("connect");
+			  });
+			  controller.on('disconnect', function() {
+				console.log("disconnect");
+			  });
+			  controller.on('focus', function() {
+				console.log("focus");
+			  });
+			  controller.on('blur', function() {
+				console.log("blur");
+			  });
+			  controller.on('deviceConnected', function() {
+				console.log("deviceConnected");
+			  });
+			  controller.on('deviceDisconnected', function() {
+				  console.log("deviceDisconnected");
+			  });
+		</script>
+	</head>
+	<body>
+		<h1>Leap Timesheets!</h1>
+		<div id="out"></div>
+				<div class="navbar-fixed-top">
+					<div class="navbar-inner">
+						<div class="container">
+							<a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+							<span class="icon-bar">
+							<span class="icon-bar">
+							<span class="icon-bar">
+							</span></span></span></a><a class="brand" href="/">DiUS Timesheets</a>
+							<div class="nav">
+							<ul class="nav nav-main">
+							<li>
+							<a href="/timesheet">Timesheet Entry
+							</a></li>
+							</ul>
+							<ul class="nav pull-right">
+							<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="navigation-user-menu">
+							Logged in as
+							dswensen
+							<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+							<li>
+							<a href="/preferences"><i class="icon-user"></i>
+							Preferences
+							</a></li>
+							<li class="divider"></li>
+							<li>
+							<a href="/auth/logout"><i class="icon-off"></i>
+							Logout
+							</a></li>
+							</ul>
+							</li>
+							</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<div id="dialog-confirm"></div>
+			<div class="ajax-error-message"></div>
+			<div class="container alert-container">
+				<div class="alert alert-position alert-notice" id="flash">
+					<a class="close" data-dismiss="alert">X</a>
+					<div id="flash_notice">This is your most recent incomplete timesheet (this week)</div>
+				</div>
+			</div>
+			<div class="container  main-content">
+
+		  <form id="timesheet" method="post" action="/timesheet/save">
+
+			<input id="project_ids_on_timesheet" name="project_ids_on_timesheet" type="hidden" value="151">
+			<input id="selected_project_ids" name="selected_project_ids" type="hidden" value="">
+
+
+			<div class="row">
+			  <div class="span5">
+				<div class="timesheet-date-range">
+				  <span title="Week starting: 21/10/2013">
+					Oct 21 - 27, 2013
+					<p class="in-weeks">(this week)</p>
+				  </span>
+				  <!--the calendar picker needs to be replaced with a bootstrap version-->
+				</div>
+				<div class="timesheet-controls">
+				  <input type="hidden" class="icon-calendar hasDatepicker" id="calendar_widget" onchange="move_to_week();" value="2013-10-21"><img class="ui-datepicker-trigger" src="/assets/datepicker-input-icon.png" alt="jump to week" title="jump to week">
+				  <span class="loggedin-control"><a href="/timesheet?week_start=2013-10-14"><img alt="Previous_icon" border="0" data-original-title="Previous Week" data-placement="top" rel="tooltip" src="/assets/previous_icon-e6459789871bdf278f9493aab5460804.png"></a></span>
+				  <span class="loggedin-control"><a href="/timesheet?week_start=2013-10-28"><img alt="Next_icon" border="0" data-original-title="Next Week" data-placement="top" rel="tooltip" src="/assets/next_icon-2ea5c46d9cc288e0a7742ee9da8f3e19.png"></a></span>
+				  <a href="/timesheet/copy?copy_from=2013-10-14&amp;week_start=2013-10-21" class="loggedin-control" id="copy-previous"><img alt="Copy_icon" border="0" data-original-title="Copy Previous Timesheet" data-placement="top" rel="tooltip" src="/assets/copy_icon-a56ce8329b9dd4d2b75919006959e3da.png"></a>
+				  &nbsp;
+				  <a href="http://timesheet.dius.com.au/jasper-pdf/servlet?loggedInUser=dswensen&amp;reportName=%2Fusr%2Flocal%2Flib%2Fjasper%2FContractServicesTimesheet_specific.jasper&amp;startDay=21&amp;startMonth=10&amp;startYear=2013" class="loggedin-control"><img alt="Pdf_download_icon" border="0" data-original-title="Download as PDF" data-placement="top" rel="tooltip" src="/assets/pdf_download_icon-3b8c31fbdd3b65c0d4cd8dc96d1d95d6.png"></a>
+				  &nbsp;
+				  <a href="/overview/index?week_start=2013-10-21" class="loggedin-control"><img alt="Month_icon" border="0" data-original-title="Monthly Overview" data-placement="top" rel="tooltip" src="/assets/month_icon-846891d3db8d8e03e73373788b3ef1de.png"></a>
+				</div>
+			  </div>
+
+			  <div class="span10 timesheet-actions valid">
+				<input style="float:right" type="submit" class="btn btn-mini btn-success" id="submit_timesheet_btn" value="Save &amp; Submit for Approval" onclick="$('input#submit_for_approval')[0].value = 'true';">
+				<input style="float:right" type="submit" class="btn btn-mini" id="save_timesheet_btn" value="Save" onclick="$('input#submit_for_approval')[0].value = 'false';">
+
+				<select class="form_control" id="project_selector" style="width:220px; float:right;" data-original-title="" title="">
+				  <option value="">Add a line</option>
+				<optgroup label="Dius Computing P/L"><option value="3">Overheads</option></optgroup><optgroup label="Dius Labs"><option value="237">DiUS Intranet - raDiUS</option><option value="151">DiUS Timesheet System</option><option value="261">Zerobot</option></optgroup><optgroup label="Macquarie University"><option value="304">Macquarie University - Mortice05 Project</option></optgroup></select>
+				
+
+				  <input type="hidden" name="user" value="dswensen">
+				<input type="hidden" name="week_start" value="2013-10-21">
+				<input type="hidden" id="submit_for_approval" name="submit_for_approval" value="false">
+				<input type="hidden" name="authenticity_token" value="F45h2fuKSAD522kGpwQcV+scnttOHYimS4o/947y2H8=">
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div id="task_times">
+				<div class="row">
+				  <div id="tasks_header" style="display: inherit;">
+					<div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 21/10</h6></div>
+					<div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 22/10</h6></div>
+					<div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 23/10</h6></div>
+					<div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 24/10</h6></div>
+					<div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 25/10</h6></div>
+					<div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 26/10</h6></div>
+					<div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 27/10</h6></div>
+					<div class="span1" id="submit_label"><h6 class="daytext" style="margin-left: 50px">Submitted?</h6></div>
+				  </div>
+				</div>
+				<div class="row">
+				  <div id="tasks_container" style="clear:both;">
+				  <div class="project proj_id_151">
+		  <div class="row" style="padding-bottom: 15px">
+			<span class="project_title">DiUS Timesheet System</span>
+			(Code: <span class="project_code">000</span>)
+			<img alt="Group Approval Project" class="group_approval_image" src="/assets/group_approval_icon-acb753540207aea179e829b12815f8ba.jpg" style="margin-left:10px;visibility:hidden;width:20px;" title="Group Approval Project">
+		  </div>
+		<div class="task row">
+		  <div class="task-title span4">
+			<select class="task_select" style="width:200px; display:inline-block;" name="times[][task_id]"><option value="425">Design and Development</option></select>
+		  </div>
+		  <div class="days">
+		  <div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group valid" style="display:inline-block">
+				<input class="hours" name="times[][2013-10-21][hours]" type="text" value="0" size="1" maxlength="2" data-original-title="" title=""> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-21][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div><div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-22][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-22][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div><div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-23][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-23][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div><div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-24][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-24][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div><div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-25][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-25][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div><div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-26][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-26][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div><div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-27][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-27][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div></div>
+		  <div class="row_time_total span2-no-margin column task-total">0h 0m</div>
+		<div class="submitted column last" style="padding-top:5px;"><img alt="Error-icon" class="error_icon" src="/assets/error-icon.gif"></div></div></div></div>
+				</div>
+				<div class="row">
+				  <div id="tasks_footer">
+					<div id="total_time" class="calculated-times" style="display: block;">
+					  <div class="col_time_total span1 offset4">&nbsp;</div>
+					  <div class="col_time_total span1">&nbsp;</div>
+					  <div class="col_time_total span1">&nbsp;</div>
+					  <div class="col_time_total span1">&nbsp;</div>
+					  <div class="col_time_total span1">&nbsp;</div>
+					  <div class="col_time_total span1">&nbsp;</div>
+					  <div class="col_time_total span1">&nbsp;</div>
+					  <div class="grand_total span1 column">0h 0m</div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  </form>
+		</div>
+
+		<div class="empty_timesheet template span12"><p><strong>No timesheet entries.</strong><br>To add an entry select a project from the drop down above</p></div>
+
+		<div class="submitted column last template" style="padding-top:5px;"></div>
+
+		<div class="project template">
+		  <div class="row" style="padding-bottom: 15px">
+			<span class="project_title"></span>
+			(Code: <span class="project_code"></span>)
+			<img alt="Group Approval Project" class="group_approval_image" src="/assets/group_approval_icon-acb753540207aea179e829b12815f8ba.jpg" style="margin-left:10px;visibility:hidden;width:20px;" title="Group Approval Project">
+		  </div>
+		</div>
+
+		<div class="task row template">
+		  <div class="task-title span4">
+			<select class="task_select" style="width:200px; display:inline-block;" name="times[][task_id]"></select>
+		  </div>
+		  <div class="days">
+		  </div>
+		  <div class="row_time_total span2-no-margin column task-total">0h 0m</div>
+		</div>
+
+		<div class="day template span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][$date][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][$date][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div>
+
+		<div class="comment_dialog template" title="Add comment">
+			<textarea class="comment" style="height: 180px;"></textarea>
+		</div>
+
+		<div id="approval_confirmation_dialog" class="template" title="Submit for approval">
+			<p>Select the projects that you want to submit timesheets for:</p>
+			<div id="project_list">
+				<!-- this is the placeholder for the dynamically generated list -->
+			</div>
+			<br>
+		</div>
+
+		<span style="display:none" class="locked_controls template icon-lock icon-large timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Locked" onclick="TE.unlock_task($(this).closest('.task'));return false;"></span>
+		<span style="display:none" class="unlocked_controls template icon-unlock icon-large timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Unlocked" onclick="TE.lock_task($(this).closest('.task'));return false;"></span>
+
+		<div class="form_validation_duplicate_task template" title="Duplicate task entries found">
+			<p>You cannot submit multiple rows for the same task. Please combine the rows before submitting.</p>
+		</div>
+
+		<img alt="Success-icon" class="success_icon template" src="/assets/success-icon-0801ebf69fc0e87ab4a8c7f66afda381.gif">
+		<img alt="Error-icon" class="error_icon template" src="/assets/error-icon-b058e1dc4cba66ff18829efbcb4b5d47.gif">
+
+		<script type="text/javascript">
+		//<![CDATA[
+
+			$("#calendar_widget").datepicker({
+				buttonImage: '/assets/active_admin/datepicker/datepicker-input-icon-bfc0a6280a9bd52aa0048bda40a86ee2.png',
+				buttonImageOnly: true,
+				changeMonth: true,
+				changeYear: true,
+				showOn: 'both',
+				dateFormat: 'yy-mm-dd',  // example: 2012-03-29
+				buttonText: 'jump to week',
+				firstDay: 1  // sets the first day to Monday
+			 });
+
+		//]]>
+		</script>
+	</body>
+</html>
