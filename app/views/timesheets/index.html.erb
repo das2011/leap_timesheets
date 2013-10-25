@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+		<%= javascript_include_tag "jquery.js" %>
+		<%= javascript_include_tag "leap.js" %>
+		<script>
+			  var pausedFrame = null;
+			  var latestFrame = null;
+			  window.onkeypress = function(e) {
+				if (e.charCode == 32) {
+				  if (pausedFrame == null) {
+					pausedFrame = latestFrame;
+				  } else {
+					pausedFrame = null;
+				  }
+				}
+			  };
+			  var controller = new Leap.Controller({enableGestures: true});
+			  
+			  var swiper = controller.gesture('swipe');
+			  var circler = controller.gesture('circle');
+			  
+			   swiper.update(function(g) {
+					console.log("we got a swiper! " + g);
+     			});	
+
+               circler.update(function(g) {
+					console.log("we got a CIRCLE!" + g);
+					last_circle_gesture = g.lastGesture;
+					console.log("progress: " + last_circle_gesture.progress);
+					
+    				var clockwiseness;
+					console.log("dire: " + clockwiseness);
+					var direction_of_pointable = g.frames[0].pointables[0].direction;
+					var direction_of_circle_normal = last_circle_gesture.normal
+				    if (direction_of_pointable.angleTo(direction_of_circle_normal) <= PI/4) {
+					   clockwiseness = "clockwise";
+				    }
+				    else
+				    {
+					   clockwiseness = "counterclockwise";
+				    }
+					console.log("direction: " + clockwiseness);
+									
+               });	   
+			  
+			  controller.loop(function(frame) {
+				latestFrame = frame;
+				
+				if(frame.gestures.length > 0){
+					document.getElementById('out').innerHTML = "<div>" + latestFrame.gestures + "</div>";
+				}
+			  });
+			  controller.on('ready', function() {
+				console.log("ready");
+			  });
+			  controller.on('connect', function() {
+				console.log("connect");
+			  });
+			  controller.on('disconnect', function() {
+				console.log("disconnect");
+			  });
+			  controller.on('focus', function() {
+				console.log("focus");
+			  });
+			  controller.on('blur', function() {
+				console.log("blur");
+			  });
+			  controller.on('deviceConnected', function() {
+				console.log("deviceConnected");
+			  });
+			  controller.on('deviceDisconnected', function() {
+				  console.log("deviceDisconnected");
+			  });
+		</script>
+	</head>
+	<body>
+		<h1>Leap Timesheets!</h1>
+		<div id="out"></div>
+	</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0060)http://timesheet.dius.com.au/timesheet?week_start=2013-10-14 -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="height:100%;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>DiUS Timesheets</title>
+
+    <meta content="authenticity_token" name="csrf-param">
+<meta content="F45h2fuKSAD522kGpwQcV+scnttOHYimS4o/947y2H8=" name="csrf-token">
+    <link href="./Timesheets_previous_files/application_bootstrap-f8f96ebcb3ce9fb687907ec5ea1b8ddb.css" media="screen" rel="stylesheet" type="text/css">
+    <script src="./Timesheets_previous_files/application-69b4c9074ea6304717fe8813bb7873a7.js" type="text/javascript"></script>
+
+	
+      <script type="text/javascript">
+//<![CDATA[
+
+        var days = ["2013-10-14","2013-10-15","2013-10-16","2013-10-17","2013-10-18","2013-10-19","2013-10-20"];
+        var week_start = days[0];
+        var task_times = [{"task_id":755,"2013-10-14":{"hours":8,"minutes":0,"comment":"","locked":true,"submitted":"true"},"locked":true,"2013-10-15":{"hours":8,"minutes":0,"comment":"","locked":true,"submitted":"true"},"2013-10-16":{"hours":8,"minutes":0,"comment":"","locked":true,"submitted":"true"},"2013-10-17":{"hours":8,"minutes":0,"comment":"","locked":true,"submitted":"true"},"2013-10-18":{"hours":8,"minutes":0,"comment":"","locked":true,"submitted":"true"}}];
+        var clients = [{"address1":"","address2":"","city":"","client_id":7,"contact_email":"","contact_first_name":"","contact_last_name":"","country":"","description":"","fax_number":"","gsm_number":"","http_url":"","organisation":"Dius Computing P/L","phone_number":"","postal_code":"","state":"L","username":""},{"address1":"","address2":"","city":"","client_id":16,"contact_email":"p.moran@diuscomputing.com.au","contact_first_name":"Peter","contact_last_name":"Moran","country":"","description":"","fax_number":"","gsm_number":"0433 855494","http_url":"","organisation":"Dius Labs","phone_number":"","postal_code":"","state":"L","username":"pmoran"},{"address1":"","address2":"","city":"NSW","client_id":27,"contact_email":"anne.ferreira@mq.edu.au","contact_first_name":"Anne","contact_last_name":"Ferrira","country":"","description":"","fax_number":"","gsm_number":"","http_url":"","organisation":"Macquarie University","phone_number":"0","postal_code":"2109","state":"L","username":""}];
+        var projects = [{"client_id":16,"proj_code":"Intranet","proj_id":237,"title":"DiUS Intranet - raDiUS"},{"client_id":16,"proj_code":"000","proj_id":151,"title":"DiUS Timesheet System"},{"client_id":27,"proj_code":"306","proj_id":304,"title":"Macquarie University - Mortice05 Project"},{"client_id":7,"proj_code":"","proj_id":3,"title":"Overheads"},{"client_id":16,"proj_code":"267","proj_id":261,"title":"Zerobot"}];
+        var is_admin = false;
+
+        var active_clients = [{"client_id":7,"organisation":"Dius Computing P/L"},{"client_id":16,"organisation":"Dius Labs"},{"client_id":27,"organisation":"Macquarie University"}];
+        var active_projects = [{"client_id":16,"proj_code":"Intranet","proj_id":237,"title":"DiUS Intranet - raDiUS"},{"client_id":16,"proj_code":"000","proj_id":151,"title":"DiUS Timesheet System"},{"client_id":27,"proj_code":"306","proj_id":304,"title":"Macquarie University - Mortice05 Project"},{"client_id":7,"proj_code":"","proj_id":3,"title":"Overheads"},{"client_id":16,"proj_code":"267","proj_id":261,"title":"Zerobot"}];
+
+        var tasks = [{"name":"Administration","proj_id":3,"task_id":15},{"name":"Annual Leave","proj_id":3,"task_id":9},{"name":"Buddy Catch-up","proj_id":3,"task_id":528},{"name":"Conferences","proj_id":3,"task_id":14},{"name":"Design & Development","proj_id":261,"task_id":658},{"name":"Design and Development","proj_id":151,"task_id":425},{"name":"Design/Development","proj_id":237,"task_id":617},{"name":"Interview","proj_id":3,"task_id":203},{"name":"Leave Without Pay","proj_id":3,"task_id":71},{"name":"Long Service Leave","proj_id":3,"task_id":72},{"name":"Office Meeting","proj_id":3,"task_id":12},{"name":"Performance Review","proj_id":3,"task_id":537},{"name":"Personal/Carer's Leave","proj_id":3,"task_id":10},{"name":"Public Holiday","proj_id":3,"task_id":79},{"name":"Sales Support","proj_id":3,"task_id":120},{"name":"Software Engineering Services","proj_id":304,"task_id":755},{"name":"Spike Days","proj_id":3,"task_id":543},{"name":"Time in Lieu","proj_id":3,"task_id":402},{"name":"Training","proj_id":3,"task_id":13},{"name":"Travel","proj_id":3,"task_id":11}];
+        function selectTextboxContent(textbox)
+        {
+            setTimeout(function() { textbox.select(); }, 10); // this solves the chrome textbox selection problem where if you use the mouse to select the box it will not select all text.
+        }
+
+        $(document).ready(TE.init);
+
+
+        function move_to_week(){
+            value = $('#calendar_widget').val()
+            window.location = "/timesheet?selected_date=" + value
+        }
+
+
+//]]>
+</script>
+  </head>
+  <body style="margin: 0 auto;background-image:url(/assets/dius_background-0b033e079078fabf2debc326ac0e3116.jpg);;background-color:#00ADEF;height:100%;">
+        <div class="navbar-fixed-top">
+<div class="navbar-inner">
+<div class="container">
+<a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+<span class="icon-bar">
+<span class="icon-bar">
+<span class="icon-bar">
+</span></span></span></a><a class="brand" href="http://timesheet.dius.com.au/">DiUS Timesheets</a>
+<div class="nav">
+<ul class="nav nav-main">
+<li>
+<a href="http://timesheet.dius.com.au/timesheet">Timesheet Entry
+</a></li>
+</ul>
+<ul class="nav pull-right">
+<li class="dropdown">
+<a class="dropdown-toggle" data-toggle="dropdown" href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-14#" id="navigation-user-menu">
+Logged in as
+dswensen
+<b class="caret"></b>
+</a>
+<ul class="dropdown-menu">
+<li>
+<a href="http://timesheet.dius.com.au/preferences"><i class="icon-user"></i>
+Preferences
+</a></li>
+<li class="divider"></li>
+<li>
+<a href="http://timesheet.dius.com.au/auth/logout"><i class="icon-off"></i>
+Logout
+</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+
+
+</div>
+</div>
+</div>
+
+    <div id="dialog-confirm"></div>
+<div class="ajax-error-message"></div>
+<div class="container alert-container">
+</div>
+
+      
+<div class="container  main-content">
+
+  <form id="timesheet" method="post" action="http://timesheet.dius.com.au/timesheet/save">
+
+    <input id="project_ids_on_timesheet" name="project_ids_on_timesheet" type="hidden" value="304">
+    <input id="selected_project_ids" name="selected_project_ids" type="hidden" value="">
+
+
+    <div class="row">
+      <div class="span5">
+        <div class="timesheet-date-range">
+          <span title="Week starting: 14/10/2013">
+            Oct 14 - 20, 2013
+            <p class="in-weeks">(last week)</p>
+          </span>
+          <!--the calendar picker needs to be replaced with a bootstrap version-->
+        </div>
+        <div class="timesheet-controls">
+          <input type="hidden" class="icon-calendar hasDatepicker" id="calendar_widget" onchange="move_to_week();" value="2013-10-14"><img class="ui-datepicker-trigger" src="./Timesheets_previous_files/datepicker-input-icon-bfc0a6280a9bd52aa0048bda40a86ee2.png" alt="jump to week" title="jump to week">
+          <span class="loggedin-control"><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-07"><img alt="Previous_icon" border="0" data-original-title="Previous Week" data-placement="top" rel="tooltip" src="./Timesheets_previous_files/previous_icon-e6459789871bdf278f9493aab5460804.png"></a></span>
+          <span class="loggedin-control"><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-21"><img alt="Next_icon" border="0" data-original-title="Next Week" data-placement="top" rel="tooltip" src="./Timesheets_previous_files/next_icon-2ea5c46d9cc288e0a7742ee9da8f3e19.png"></a></span>
+          <a href="http://timesheet.dius.com.au/timesheet/copy?copy_from=2013-10-07&week_start=2013-10-14" class="loggedin-control" id="copy-previous"><img alt="Copy_icon" border="0" data-original-title="Copy Previous Timesheet" data-placement="top" rel="tooltip" src="./Timesheets_previous_files/copy_icon-a56ce8329b9dd4d2b75919006959e3da.png"></a>
+          &nbsp;
+          <a href="http://timesheet.dius.com.au/jasper-pdf/servlet?loggedInUser=dswensen&reportName=%2Fusr%2Flocal%2Flib%2Fjasper%2FContractServicesTimesheet_specific.jasper&startDay=14&startMonth=10&startYear=2013" class="loggedin-control"><img alt="Pdf_download_icon" border="0" data-original-title="Download as PDF" data-placement="top" rel="tooltip" src="./Timesheets_previous_files/pdf_download_icon-3b8c31fbdd3b65c0d4cd8dc96d1d95d6.png"></a>
+          &nbsp;
+          <a href="http://timesheet.dius.com.au/overview/index?week_start=2013-10-14" class="loggedin-control"><img alt="Month_icon" border="0" data-original-title="Monthly Overview" data-placement="top" rel="tooltip" src="./Timesheets_previous_files/month_icon-846891d3db8d8e03e73373788b3ef1de.png"></a>
+        </div>
+      </div>
+
+      <div class="span10 timesheet-actions">
+        <input style="float:right" type="submit" class="btn btn-mini btn-success" id="submit_timesheet_btn" value="Save &amp; Submit for Approval" disabled="disabled" onclick="$(&#39;input#submit_for_approval&#39;)[0].value = &#39;true&#39;;">
+        <input style="float:right" type="submit" class="btn btn-mini" id="save_timesheet_btn" value="Save" disabled="disabled" onclick="$(&#39;input#submit_for_approval&#39;)[0].value = &#39;false&#39;;">
+
+        <select class="form_control" id="project_selector" style="width:220px; float:right;">
+          <option value="">Add a line</option>
+        <optgroup label="Dius Computing P/L"><option value="3">Overheads</option></optgroup><optgroup label="Dius Labs"><option value="237">DiUS Intranet - raDiUS</option><option value="151">DiUS Timesheet System</option><option value="261">Zerobot</option></optgroup><optgroup label="Macquarie University"><option value="304">Macquarie University - Mortice05 Project</option></optgroup></select>
+        
+
+          <input type="hidden" name="user" value="dswensen">
+        <input type="hidden" name="week_start" value="2013-10-14">
+        <input type="hidden" id="submit_for_approval" name="submit_for_approval" value="false">
+        <input type="hidden" name="authenticity_token" value="F45h2fuKSAD522kGpwQcV+scnttOHYimS4o/947y2H8=">
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="task_times">
+        <div class="row">
+          <div id="tasks_header" style="display: inherit;">
+            <div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 14/10</h6></div>
+            <div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 15/10</h6></div>
+            <div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 16/10</h6></div>
+            <div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 17/10</h6></div>
+            <div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 18/10</h6></div>
+            <div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 19/10</h6></div>
+            <div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 20/10</h6></div>
+            <div class="span1" id="submit_label"><h6 class="daytext" style="margin-left: 50px">Submitted?</h6></div>
+          </div>
+        </div>
+        <div class="row">
+          <div id="tasks_container" style="clear:both;">
+          <div class="project proj_id_304">
+  <div class="row" style="padding-bottom: 15px">
+    <span class="project_title">Macquarie University - Mortice05 Project</span>
+    (Code: <span class="project_code">306</span>)
+    <img alt="Group Approval Project" class="group_approval_image" src="./Timesheets_previous_files/group_approval_icon-acb753540207aea179e829b12815f8ba.jpg" style="margin-left:10px;visibility:hidden;width:20px;" title="Group Approval Project">
+  </div>
+<div class="task row">
+  <div class="task-title span4">
+    <select class="task_select" style="width:200px; display:inline-block;" name="times[][task_id]"><option value="755" selected="selected">Software Engineering Services</option></select>
+    <span class="delete_timesheet_line icon-remove icon-large timesheet-icon" style="display:inline-block" rel="tooltip" data-placement="bottom" data-original-title="Delete Task"></span>
+    <span class="locked_status"><span style="display: inline-block;" class="locked_controls icon-lock icon-large timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Locked" onclick="TE.unlock_task($(this).closest(&#39;.task&#39;));return false;"></span></span>
+  </div>
+  <div class="days">
+  <div class="day span1-no-margin">
+  <div class="column" style="padding:0; margin 0; border 0;">
+    <div class="control-group valid" style="display:inline-block">
+	    <input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-14][hours]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);" data-original-title="" title=""> :
+    </div>
+    <div class="control-group" style="display:inline-block">
+	    <input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-14][minutes]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);">
+    </div>
+    <input class="comment" type="hidden" name="times[][2013-10-14][comment]" value="">
+    <input class="locked" type="hidden" name="times[][2013-10-14][locked]" value="true">
+    <span class="icon-comment-alt comment_button timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Comment" style="display:inline-block; border: 0;" data-locked="true"></span>
+  </div>
+</div><div class="day span1-no-margin">
+  <div class="column" style="padding:0; margin 0; border 0;">
+    <div class="control-group" style="display:inline-block">
+	    <input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-15][hours]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);"> :
+    </div>
+    <div class="control-group" style="display:inline-block">
+	    <input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-15][minutes]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);">
+    </div>
+    <input class="comment" type="hidden" name="times[][2013-10-15][comment]" value="">
+    <input class="locked" type="hidden" name="times[][2013-10-15][locked]" value="true">
+    <span class="icon-comment-alt comment_button timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Comment" style="display:inline-block; border: 0;" data-locked="true"></span>
+  </div>
+</div><div class="day span1-no-margin">
+  <div class="column" style="padding:0; margin 0; border 0;">
+    <div class="control-group" style="display:inline-block">
+	    <input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-16][hours]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);"> :
+    </div>
+    <div class="control-group" style="display:inline-block">
+	    <input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-16][minutes]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);">
+    </div>
+    <input class="comment" type="hidden" name="times[][2013-10-16][comment]" value="">
+    <input class="locked" type="hidden" name="times[][2013-10-16][locked]" value="true">
+    <span class="icon-comment-alt comment_button timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Comment" style="display:inline-block; border: 0;" data-locked="true"></span>
+  </div>
+</div><div class="day span1-no-margin">
+  <div class="column" style="padding:0; margin 0; border 0;">
+    <div class="control-group" style="display:inline-block">
+	    <input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-17][hours]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);"> :
+    </div>
+    <div class="control-group" style="display:inline-block">
+	    <input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-17][minutes]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);">
+    </div>
+    <input class="comment" type="hidden" name="times[][2013-10-17][comment]" value="">
+    <input class="locked" type="hidden" name="times[][2013-10-17][locked]" value="true">
+    <span class="icon-comment-alt comment_button timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Comment" style="display:inline-block; border: 0;" data-locked="true"></span>
+  </div>
+</div><div class="day span1-no-margin">
+  <div class="column" style="padding:0; margin 0; border 0;">
+    <div class="control-group" style="display:inline-block">
+	    <input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-18][hours]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);"> :
+    </div>
+    <div class="control-group" style="display:inline-block">
+	    <input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-18][minutes]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);">
+    </div>
+    <input class="comment" type="hidden" name="times[][2013-10-18][comment]" value="">
+    <input class="locked" type="hidden" name="times[][2013-10-18][locked]" value="true">
+    <span class="icon-comment-alt comment_button timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Comment" style="display:inline-block; border: 0;" data-locked="true"></span>
+  </div>
+</div><div class="day span1-no-margin">
+  <div class="column" style="padding:0; margin 0; border 0;">
+    <div class="control-group" style="display:inline-block">
+	    <input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-19][hours]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);"> :
+    </div>
+    <div class="control-group" style="display:inline-block">
+	    <input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-19][minutes]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);">
+    </div>
+    <input class="comment" type="hidden" name="times[][2013-10-19][comment]">
+    <input class="locked" type="hidden" name="times[][2013-10-19][locked]" value="false">
+    <span class="icon-comment-alt comment_button timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Comment" style="display:inline-block; border: 0;" data-locked="true"></span>
+  </div>
+</div><div class="day span1-no-margin">
+  <div class="column" style="padding:0; margin 0; border 0;">
+    <div class="control-group" style="display:inline-block">
+	    <input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-20][hours]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);"> :
+    </div>
+    <div class="control-group" style="display:inline-block">
+	    <input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-20][minutes]" type="text" value="0" size="1" maxlength="2" readonly="readonly" style="background-color: rgb(224, 224, 224); color: rgb(133, 133, 133);">
+    </div>
+    <input class="comment" type="hidden" name="times[][2013-10-20][comment]">
+    <input class="locked" type="hidden" name="times[][2013-10-20][locked]" value="false">
+    <span class="icon-comment-alt comment_button timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Comment" style="display:inline-block; border: 0;" data-locked="true"></span>
+  </div>
+</div></div>
+  <div class="row_time_total span2-no-margin column task-total">40h 0m</div>
+<div class="submitted column last" style="padding-top:5px;"><img alt="Success-icon" class="success_icon" src="./Timesheets_previous_files/success-icon-0801ebf69fc0e87ab4a8c7f66afda381.gif"></div></div></div></div>
+        </div>
+        <div class="row">
+          <div id="tasks_footer">
+            <div id="total_time" class="calculated-times" style="display: block;">
+              <div class="col_time_total span1 offset4">8h 0m</div>
+              <div class="col_time_total span1">8h 0m</div>
+              <div class="col_time_total span1">8h 0m</div>
+              <div class="col_time_total span1">8h 0m</div>
+              <div class="col_time_total span1">8h 0m</div>
+              <div class="col_time_total span1">&nbsp;</div>
+              <div class="col_time_total span1">&nbsp;</div>
+              <div class="grand_total span1 column">40h 0m</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="empty_timesheet template span12"><p><strong>No timesheet entries.</strong><br>To add an entry select a project from the drop down above</p></div>
+
+<div class="submitted column last template" style="padding-top:5px;"></div>
+
+<div class="project template">
+  <div class="row" style="padding-bottom: 15px">
+    <span class="project_title"></span>
+    (Code: <span class="project_code"></span>)
+    <img alt="Group Approval Project" class="group_approval_image" src="./Timesheets_previous_files/group_approval_icon-acb753540207aea179e829b12815f8ba.jpg" style="margin-left:10px;visibility:hidden;width:20px;" title="Group Approval Project">
+  </div>
+</div>
+
+<div class="task row template">
+  <div class="task-title span4">
+    <select class="task_select" style="width:200px; display:inline-block;" name="times[][task_id]"></select>
+    <span class="delete_timesheet_line icon-remove icon-large timesheet-icon" style="display:inline-block" rel="tooltip" data-placement="bottom" data-original-title="Delete Task"></span>
+    <span class="locked_status"></span>
+  </div>
+  <div class="days">
+  </div>
+  <div class="row_time_total span2-no-margin column task-total">0h 0m</div>
+</div>
+
+<div class="day template span1-no-margin">
+  <div class="column" style="padding:0; margin 0; border 0;">
+    <div class="control-group" style="display:inline-block">
+	    <input class="hours input-mini" onclick="selectTextboxContent(this);" name="times[][$date][hours]" type="text" value="0" size="1" maxlength="2"> :
+    </div>
+    <div class="control-group" style="display:inline-block">
+	    <input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][$date][minutes]" type="text" value="0" size="1" maxlength="2">
+    </div>
+    <input class="comment" type="hidden" name="times[][$date][comment]">
+    <input class="locked" type="hidden" name="times[][$date][locked]" value="false">
+    <span class="icon-comment-alt comment_button timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Comment" style="display:inline-block; border: 0;"></span>
+  </div>
+</div>
+
+<div class="comment_dialog template" title="Add comment">
+	<textarea class="comment" style="height: 180px;"></textarea>
+</div>
+
+<div id="approval_confirmation_dialog" class="template" title="Submit for approval">
+    <p>Select the projects that you want to submit timesheets for:</p>
+    <div id="project_list">
+        <!-- this is the placeholder for the dynamically generated list -->
+    </div>
+    <br>
+</div>
+
+<span style="display:none" class="locked_controls template icon-lock icon-large timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Locked" onclick="TE.unlock_task($(this).closest(&#39;.task&#39;));return false;"></span>
+<span style="display:none" class="unlocked_controls template icon-unlock icon-large timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Unlocked" onclick="TE.lock_task($(this).closest(&#39;.task&#39;));return false;"></span>
+
+<div class="form_validation_duplicate_task template" title="Duplicate task entries found">
+	<p>You cannot submit multiple rows for the same task. Please combine the rows before submitting.</p>
+</div>
+
+<img alt="Success-icon" class="success_icon template" src="./Timesheets_previous_files/success-icon-0801ebf69fc0e87ab4a8c7f66afda381.gif">
+<img alt="Error-icon" class="error_icon template" src="./Timesheets_previous_files/error-icon-b058e1dc4cba66ff18829efbcb4b5d47.gif">
+
+<script type="text/javascript">
+//<![CDATA[
+
+
+    $("#calendar_widget").datepicker({
+        buttonImage: '/assets/active_admin/datepicker/datepicker-input-icon-bfc0a6280a9bd52aa0048bda40a86ee2.png',
+        buttonImageOnly: true,
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+        dateFormat: 'yy-mm-dd',  // example: 2012-03-29
+        buttonText: 'jump to week',
+        firstDay: 1  // sets the first day to Monday
+     });
+
+
+//]]>
+</script><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>
+
+    
+  
+
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-message-dialog" style="display: none; z-index: 1000; outline: 0px;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title" id="ui-dialog-title-message-dialog">Info</span><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-14#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span class="ui-icon ui-icon-closethick">close</span></a></div><div id="message-dialog" class="ui-dialog-content ui-widget-content"></div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">OK</span></button></div></div></div><div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-confirm-dialog" style="display: none; z-index: 1000; outline: 0px;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title" id="ui-dialog-title-confirm-dialog">Confirm</span><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-14#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span class="ui-icon ui-icon-closethick">close</span></a></div><div id="confirm-dialog" class="ui-dialog-content ui-widget-content"></div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">OK</span></button><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">Cancel</span></button></div></div></div><div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-comment-dialog" style="display: none; z-index: 1000; outline: 0px;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title" id="ui-dialog-title-comment-dialog">Comments</span><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-14#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span class="ui-icon ui-icon-closethick">close</span></a></div><div id="comment-dialog" class="ui-dialog-content ui-widget-content"></div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">OK</span></button></div></div></div></body></html>
