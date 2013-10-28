@@ -70,7 +70,10 @@
             value = $('#calendar_widget').val()
             window.location = "/timesheet?selected_date=" + value
         }
-
+		
+		function hideBox(){
+			$('#approve_dialog').hide();
+		}		
 
 //]]>
 </script>
@@ -120,13 +123,13 @@ Logout
 </div>
 
     <div id="dialog-confirm"></div>
-<div class="ajax-error-message"></div>
-<div class="container alert-container">
-<div class="alert alert-position alert-notice" id="flash">
-<a class="close" data-dismiss="alert">x</a>
-<div id="flash_notice">This is your most recent incomplete timesheet (this week)</div>
-</div>
-</div>
+	<div class="ajax-error-message"></div>
+		<div class="container alert-container">
+			<div class="alert alert-position alert-notice" id="flash">
+				<a class="close" data-dismiss="alert">x</a>
+			<div id="flash_notice">This is your most recent incomplete timesheet (this week)</div>
+		</div>
+	</div>
 
 <style type="text/css">
 	.panel{
@@ -159,8 +162,8 @@ Logout
 		  <div class="span5">
 			<div class="timesheet-date-range">
 			  <span title="Week starting: 21/10/2013">
-				Oct 14 - 20, 2013
-				<p class="in-weeks">(2 weeks ago)</p>
+				Oct 21 - 27, 2013
+				<p class="in-weeks">(last week)</p>
 			  </span>
 			  <!--the calendar picker needs to be replaced with a bootstrap version-->
 			</div>
@@ -187,13 +190,13 @@ Logout
 		  <div id="task_times">
 			<div class="row">
 			  <div id="tasks_header" style="display: inherit;">
-				<div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 14/10</h6></div>
-				<div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 15/10</h6></div>
-				<div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 16/10</h6></div>
-				<div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 17/10</h6></div>
-				<div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 18/10</h6></div>
-				<div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 19/10</h6></div>
-				<div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 20/10</h6></div>
+				<div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 21/10</h6></div>
+				<div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 22/10</h6></div>
+				<div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 23/10</h6></div>
+				<div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 24/10</h6></div>
+				<div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 25/10</h6></div>
+				<div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 26/10</h6></div>
+				<div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 27/10</h6></div>
 				<div class="span1" id="submit_label"><h6 class="daytext" style="margin-left: 50px">Submitted?</h6></div>
 			  </div>
 			</div>
@@ -325,12 +328,12 @@ Logout
 				<div class="row">
 				  <div id="tasks_header" style="display:inherit;">
 					<div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 04/11</h6></div>
-					<div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 05/10</h6></div>
-					<div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 16/10</h6></div>
-					<div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 17/10</h6></div>
-					<div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 18/10</h6></div>
-					<div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 19/10</h6></div>
-					<div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 20/10</h6></div>
+					<div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 05/11</h6></div>
+					<div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 06/11</h6></div>
+					<div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 07/11</h6></div>
+					<div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 08/11</h6></div>
+					<div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 09/11</h6></div>
+					<div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> HI20/11</h6></div>
 					<div class="span1" id="submit_label"><h6 class="daytext" style="margin-left: 50px">Submitted?</h6></div>
 				  </div>
 				</div>
@@ -440,10 +443,9 @@ Logout
       <div class="span5">
         <div class="timesheet-date-range">
           <span title="Week starting: 21/10/2013">
-            Oct 21 - 27, 2013
-            <p class="in-weeks">(last week)</p>
+            Oct 28 - Nov 3, 2013
+            <p class="in-weeks">(this week)</p>
           </span>
-          <!--the calendar picker needs to be replaced with a bootstrap version-->
         </div>
         <div class="timesheet-controls">
           <input type="hidden" class="icon-calendar hasDatepicker" id="calendar_widget" onchange="move_to_week();" value="2013-10-21"><img class="ui-datepicker-trigger" src="assets/datepicker-input-icon.png" alt="jump to week" title="jump to week">
@@ -477,13 +479,13 @@ Logout
       <div id="task_times">
         <div class="row">
           <div id="tasks_header" style="display: inherit;">
-            <div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 21/10</h6></div>
-            <div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 22/10</h6></div>
-            <div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 23/10</h6></div>
-            <div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 24/10</h6></div>
-            <div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 25/10</h6></div>
-            <div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 26/10</h6></div>
-            <div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 27/10</h6></div>
+            <div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 28/10</h6></div>
+            <div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 29/10</h6></div>
+            <div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 30/10</h6></div>
+            <div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 31/10</h6></div>
+            <div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 01/11</h6></div>
+            <div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 02/11</h6></div>
+            <div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 03/11</h6></div>
             <div class="span1" id="submit_label"><h6 class="daytext" style="margin-left: 50px">Submitted?</h6></div>
           </div>
         </div>
@@ -648,6 +650,7 @@ Logout
     <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
         <div class="ui-dialog-buttonset">
             <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+			        onclick="hideBox()"
                     role="button"><span class="ui-button-text">Cancel</span></button>
             <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     role="button"><span class="ui-button-text">Submit Timesheet</span></button>
@@ -767,7 +770,6 @@ Logout
 						if(gesture.state === 'start'){
 							//console.log('we got a start! ' + gesture.id);
 						}
-						//console.log(i + 'gesture state: ' + gesture.state + ' len: ' + all_gestures.length);
 					}
 					
 					var current_time = new Date().getTime();
@@ -864,33 +866,35 @@ Logout
 							if(page_state == 'none'){
 								page_state = 'next';
 								$('#next_pane').css('margin-left', '6%');
+								//$('#flash').hide();
+								$('#flash').fadeOut( "slow" );
 							}else if(page_state == 'prev'){
 								$('#previous_pane').css('margin-left', '-102%');
 								page_state = 'none';
+								//$('#flash').show();
+								$('#flash').fadeIn( "slow" );
 							}
 						}else{
 							console.log("previous week!");
 							if(page_state == 'none'){
 								page_state = 'prev';
 								$('#previous_pane').css('margin-left', '6%');
+								$('#flash').fadeOut( "slow" );
 							}else if(page_state == 'next'){
 								$('#next_pane').css('margin-left', '102%');
 								page_state = 'none';
+								$('#flash').fadeIn( "slow" );
 							}
 						}
 				  }
 				  if (gesture.type == 'swipe') {
 						if (gesture.state == 'stop') {
-							//console.log("stopped!");
-							state = 'stop';
 
-							//console.log(" speed: " + gesture.speed + " id: " + gesture.id);
-							
+     						state = 'stop';
+
 							// Interestingly - the right hand - swipes faster OUTWARDS - than inwards... 
 							// meaning that you need really two different thresholds here... 
-							
 							difference_between_token_and_current_id = parseInt(gesture.id) - parseInt(token);
-							//console.log("difference: " + difference_between_token_and_current_id);
 							
 							if(gesture.speed > 1000 && (difference_between_token_and_current_id > 3)){
 								if(gesture.direction[0] > 0){
@@ -913,14 +917,6 @@ Logout
 								token = parseInt(gesture.id);
 							}
 						}
-						//if (gesture.state == 'start') {
-						//	console.log("started!!!!");
-						//	state = 'start';
-						//}
-						//if(previous_state != state){
-						//	console.log("CHANGEEDDD!!");
-						//	
-						//}
 						previous_state = state;
 				  }
 			  });
