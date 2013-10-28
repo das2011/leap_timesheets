@@ -23,6 +23,12 @@
 			font-size:30px;
 		}
 		
+		.day .column input.hours1 {
+			height:30px;
+			width:15px;
+			font-size:30px;
+		}
+		
 		.day .column input.minutes {
 			height:30px;
 			width:15px;
@@ -44,6 +50,7 @@
         var week_start = days[0];
         var task_times = [];
         var clients = [{"address1":"","address2":"","city":"","client_id":7,"contact_email":"","contact_first_name":"","contact_last_name":"","country":"","description":"","fax_number":"","gsm_number":"","http_url":"","organisation":"Dius Computing P/L","phone_number":"","postal_code":"","state":"L","username":""},{"address1":"","address2":"","city":"","client_id":16,"contact_email":"p.moran@diuscomputing.com.au","contact_first_name":"Peter","contact_last_name":"Moran","country":"","description":"","fax_number":"","gsm_number":"0433 855494","http_url":"","organisation":"Dius Labs","phone_number":"","postal_code":"","state":"L","username":"pmoran"},{"address1":"","address2":"","city":"NSW","client_id":27,"contact_email":"anne.ferreira@mq.edu.au","contact_first_name":"Anne","contact_last_name":"Ferrira","country":"","description":"","fax_number":"","gsm_number":"","http_url":"","organisation":"Macquarie University","phone_number":"0","postal_code":"2109","state":"L","username":""}];
+        var projects = [{"client_id":16,"proj_code":"Intranet","proj_id":237,"title":"DiUS Intranet - raDiUS"},{"client_id":16,"proj_code":"000","proj_id":151,"title":"DiUS Timesheet System"},{"client_id":27,"proj_code":"306","proj_id":304,"title":"Macquarie University - Mortice05 Project"},{"client_id":7,"proj_code":"","proj_id":3,"title":"Overheads"},{"client_id":16,"proj_code":"267","proj_id":261,"title":"Zerobot"}];
         var projects = [{"client_id":16,"proj_code":"Intranet","proj_id":237,"title":"DiUS Intranet - raDiUS"},{"client_id":16,"proj_code":"000","proj_id":151,"title":"DiUS Timesheet System"},{"client_id":27,"proj_code":"306","proj_id":304,"title":"Macquarie University - Mortice05 Project"},{"client_id":7,"proj_code":"","proj_id":3,"title":"Overheads"},{"client_id":16,"proj_code":"267","proj_id":261,"title":"Zerobot"}];
         var is_admin = false;
 
@@ -121,7 +128,306 @@ Logout
 </div>
 </div>
 
-      
+<style type="text/css">
+	.panel{
+		width: 1190px;
+		min-height: 100%;
+		position: absolute;
+		background-color: #FFF;
+		margin-left: -102%;
+		z-index:2;
+		-webkit-transition: all .6s ease-in-out;
+		-moz-transition: all .6s ease-in-out;
+		-o-transition: all .6s ease-in-out;
+		-ms-transition: all .6s ease-in-out;
+		transition: all .6s ease-in-out;
+		margin-top:5px;
+	}
+	
+	#next_pane{
+		margin-left:102%;
+		z-index:3;
+	}
+</style>
+
+
+<div class="panel previous" id="previous_pane">
+	<form id="timesheet" method="post" action="http://timesheet.dius.com.au/timesheet/save">
+		<input id="project_ids_on_timesheet" name="project_ids_on_timesheet" type="hidden" value="304">
+		<input id="selected_project_ids" name="selected_project_ids" type="hidden" value="">
+		<div class="row">
+		  <div class="span5">
+			<div class="timesheet-date-range">
+			  <span title="Week starting: 21/10/2013">
+				Oct 14 - 20, 2013
+				<p class="in-weeks">(2 weeks ago)</p>
+			  </span>
+			  <!--the calendar picker needs to be replaced with a bootstrap version-->
+			</div>
+			<div class="timesheet-controls">
+			  <input type="hidden" class="icon-calendar hasDatepicker" id="calendar_widget" onchange="move_to_week();" value="2013-10-21"><img class="ui-datepicker-trigger" src="assets/datepicker-input-icon.png" alt="jump to week" title="jump to week">
+			  <span class="loggedin-control"><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-14"><img alt="Previous_icon" border="0" data-original-title="Previous Week" data-placement="top" rel="tooltip" src="assets/previous_icon.png"></a></span>
+			  <span class="loggedin-control"><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-28"><img alt="Next_icon" border="0" data-original-title="Next Week" data-placement="top" rel="tooltip" src="assets/next_icon.png"></a></span>
+			  <a href="http://timesheet.dius.com.au/timesheet/copy?copy_from=2013-10-14&amp;week_start=2013-10-21" class="loggedin-control" id="copy-previous"><img alt="Copy_icon" border="0" data-original-title="Copy Previous Timesheet" data-placement="top" rel="tooltip" src="assets/copy_icon.png"></a>
+			  &nbsp;
+			  <a href="http://timesheet.dius.com.au/jasper-pdf/servlet?loggedInUser=dswensen&amp;reportName=%2Fusr%2Flocal%2Flib%2Fjasper%2FContractServicesTimesheet_specific.jasper&amp;startDay=21&amp;startMonth=10&amp;startYear=2013" class="loggedin-control"><img alt="Pdf_download_icon" border="0" data-original-title="Download as PDF" data-placement="top" rel="tooltip" src="assets/pdf_download_icon.png"></a>
+			  &nbsp;
+			  <a href="http://timesheet.dius.com.au/overview/index?week_start=2013-10-21" class="loggedin-control"><img alt="Month_icon" border="0" data-original-title="Monthly Overview" data-placement="top" rel="tooltip" src="assets/month_icon.png"></a>
+			</div>
+		  </div>
+		  <div class="span10 timesheet-actions valid">
+			<input style="float:right" type="submit" class="btn btn-mini btn-success" id="submit_timesheet_btn" value="Save &amp; Submit for Approval" onclick="$('input#submit_for_approval')[0].value = 'true';" disabled="disabled">
+			<input style="float:right" type="submit" class="btn btn-mini" id="save_timesheet_btn" value="Save" onclick="$('input#submit_for_approval')[0].value = 'false';" disabled="disabled">
+			<select class="form_control" id="project_selector" style="width:220px; float:right;" data-original-title="" title="">
+			  <option value="">Add a line</option>
+			<optgroup label="Dius Computing P/L"><option value="3">Overheads</option></optgroup><optgroup label="Dius Labs"><option value="237">DiUS Intranet - raDiUS</option><option value="151">DiUS Timesheet System</option><option value="261">Zerobot</option></optgroup><optgroup label="Macquarie University"><option value="304">Macquarie University - Mortice05 Project</option></optgroup><optgroup label="Dius Computing P/L"><option value="3">Overheads</option></optgroup><optgroup label="Dius Labs"><option value="237">DiUS Intranet - raDiUS</option><option value="151">DiUS Timesheet System</option><option value="261">Zerobot</option></optgroup><optgroup label="Macquarie University"><option value="304">Macquarie University - Mortice05 Project</option></optgroup></select>
+		  </div>
+		</div>
+		<div class="row">
+		  <div id="task_times">
+			<div class="row">
+			  <div id="tasks_header" style="display: inherit;">
+				<div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 14/10</h6></div>
+				<div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 15/10</h6></div>
+				<div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 16/10</h6></div>
+				<div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 17/10</h6></div>
+				<div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 18/10</h6></div>
+				<div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 19/10</h6></div>
+				<div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 20/10</h6></div>
+				<div class="span1" id="submit_label"><h6 class="daytext" style="margin-left: 50px">Submitted?</h6></div>
+			  </div>
+			</div>
+			<div class="row">
+			  <div id="tasks_container" style="clear:both;">
+			  <div class="project proj_id_304">
+	  <div class="row" style="padding-bottom: 15px">
+		<span class="project_title">Macquarie University - Mortice05 Project</span>
+		<span class="project_code" style="font-size:14px;">(Code: 306)</span>
+		<img alt="Group Approval Project" class="group_approval_image" src="assets/group_approval_icon-acb753540207aea179e829b12815f8ba.jpg" style="margin-left:10px;visibility:hidden;width:20px;" title="Group Approval Project">
+	  </div>
+	<div class="task row">
+	  <div class="task-title span4">
+		<select class="task_select" style="width:200px; display:inline-block;" name="times[][task_id]"><option value="755">Software Engineering Services</option></select>
+	  </div>
+	  <div class="days">
+	  <div class="day span1-no-margin">
+	  <div class="column" style="padding:0; margin 0; border 0;">
+		<div class="control-group" style="display:inline-block">
+			<input class="hours1 current input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-21][hours]" type="text" value="0" size="1" maxlength="2" data-original-title="" title=""> :
+		</div>
+		<div class="control-group" style="display:inline-block">
+			<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-21][minutes]" type="text" value="0" size="1" maxlength="2">
+		</div>
+	  </div>
+	</div>
+	<div class="day span1-no-margin">
+	  <div class="column" style="padding:0; margin 0; border 0;">
+		<div class="control-group" style="display:inline-block">
+			<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-22][hours]" type="text" value="0" size="1" maxlength="2"> :
+		</div>
+		<div class="control-group" style="display:inline-block">
+			<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-22][minutes]" type="text" value="0" size="1" maxlength="2">
+		</div>
+	  </div>
+	</div>
+	<div class="day span1-no-margin">
+	  <div class="column" style="padding:0; margin 0; border 0;">
+		<div class="control-group" style="display:inline-block">
+			<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-23][hours]" type="text" value="0" size="1" maxlength="2"> :
+		</div>
+		<div class="control-group" style="display:inline-block">
+			<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-23][minutes]" type="text" value="0" size="1" maxlength="2">
+		</div>
+	  </div>
+	</div>
+	<div class="day span1-no-margin">
+	  <div class="column" style="padding:0; margin 0; border 0;">
+		<div class="control-group" style="display:inline-block">
+			<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-24][hours]" type="text" value="0" size="1" maxlength="2"> :
+		</div>
+		<div class="control-group" style="display:inline-block">
+			<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-24][minutes]" type="text" value="0" size="1" maxlength="2">
+		</div>
+	  </div>
+	</div>
+	<div class="day span1-no-margin">
+	  <div class="column" style="padding:0; margin 0; border 0;">
+		<div class="control-group" style="display:inline-block">
+			<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-25][hours]" type="text" value="0" size="1" maxlength="2"> :
+		</div>
+		<div class="control-group" style="display:inline-block">
+			<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-25][minutes]" type="text" value="0" size="1" maxlength="2">
+		</div>
+	  </div>
+	</div>
+	<div class="day span1-no-margin">
+	  <div class="column" style="padding:0; margin 0; border 0;">
+		<div class="control-group" style="display:inline-block">
+			<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-26][hours]" type="text" value="0" size="1" maxlength="2"> :
+		</div>
+		<div class="control-group" style="display:inline-block">
+			<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-26][minutes]" type="text" value="0" size="1" maxlength="2">
+		</div>
+	  </div>
+	</div><div class="day span1-no-margin">
+	  <div class="column" style="padding:0; margin 0; border 0;">
+		<div class="control-group" style="display:inline-block">
+			<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-27][hours]" type="text" value="0" size="1" maxlength="2"> :
+		</div>
+		<div class="control-group" style="display:inline-block">
+			<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-27][minutes]" type="text" value="0" size="1" maxlength="2">
+		</div>
+	  </div>
+	</div></div>
+	  <!--div class="row_time_total span2-no-margin column task-total">0h 0m</div -->
+	<div class="submitted column last" style="padding-top:5px;"><img alt="Error-icon" class="error_icon" src="assets/error-icon-b058e1dc4cba66ff18829efbcb4b5d47.gif"></div></div></div></div>
+			</div>
+			<div class="row">
+			  <div id="tasks_footer">
+			  </div>
+			</div>
+		  </div>
+		</div>
+	  </form>	
+</div>
+
+<div class="panel" id="next_pane">
+	<form id="timesheet" method="post" action="http://timesheet.dius.com.au/timesheet/save">
+	<div class="row">
+		<div class="span5">
+			<div class="timesheet-date-range">
+				  <span title="Week starting: 21/10/2013">
+					Nov 4 - 10, 2013
+					<p class="in-weeks">(next week)</p>
+				  </span>
+				</div>
+				<div class="timesheet-controls">
+				  <input type="hidden" class="icon-calendar hasDatepicker" id="calendar_widget" onchange="move_to_week();" value="2013-10-21"><img class="ui-datepicker-trigger" src="assets/datepicker-input-icon.png" alt="jump to week" title="jump to week">
+				  <span class="loggedin-control"><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-14"><img alt="Previous_icon" border="0" data-original-title="Previous Week" data-placement="top" rel="tooltip" src="assets/previous_icon.png"></a></span>
+				  <span class="loggedin-control"><a href="http://timesheet.dius.com.au/timesheet?week_start=2013-10-28"><img alt="Next_icon" border="0" data-original-title="Next Week" data-placement="top" rel="tooltip" src="assets/next_icon.png"></a></span>
+				  <a href="http://timesheet.dius.com.au/timesheet/copy?copy_from=2013-10-14&amp;week_start=2013-10-21" class="loggedin-control" id="copy-previous"><img alt="Copy_icon" border="0" data-original-title="Copy Previous Timesheet" data-placement="top" rel="tooltip" src="assets/copy_icon.png"></a>
+				  &nbsp;
+				  <a href="http://timesheet.dius.com.au/jasper-pdf/servlet?loggedInUser=dswensen&amp;reportName=%2Fusr%2Flocal%2Flib%2Fjasper%2FContractServicesTimesheet_specific.jasper&amp;startDay=21&amp;startMonth=10&amp;startYear=2013" class="loggedin-control"><img alt="Pdf_download_icon" border="0" data-original-title="Download as PDF" data-placement="top" rel="tooltip" src="assets/pdf_download_icon.png"></a>
+				  &nbsp;
+				  <a href="http://timesheet.dius.com.au/overview/index?week_start=2013-10-21" class="loggedin-control"><img alt="Month_icon" border="0" data-original-title="Monthly Overview" data-placement="top" rel="tooltip" src="assets/month_icon.png"></a>
+				</div>
+			  </div>
+			  <div class="span10 timesheet-actions valid">
+				<input style="float:right" type="submit" class="btn btn-mini btn-success" id="submit_timesheet_btn" value="Save &amp; Submit for Approval" onclick="$('input#submit_for_approval')[0].value = 'true';" disabled="disabled">
+				<input style="float:right" type="submit" class="btn btn-mini" id="save_timesheet_btn" value="Save" onclick="$('input#submit_for_approval')[0].value = 'false';" disabled="disabled">
+				<select class="form_control" id="project_selector" style="width:220px; float:right;" data-original-title="" title="">
+				  <option value="">Add a line</option>
+				<optgroup label="Dius Computing P/L"><option value="3">Overheads</option></optgroup><optgroup label="Dius Labs"><option value="237">DiUS Intranet - raDiUS</option><option value="151">DiUS Timesheet System</option><option value="261">Zerobot</option></optgroup><optgroup label="Macquarie University"><option value="304">Macquarie University - Mortice05 Project</option></optgroup><optgroup label="Dius Computing P/L"><option value="3">Overheads</option></optgroup><optgroup label="Dius Labs"><option value="237">DiUS Intranet - raDiUS</option><option value="151">DiUS Timesheet System</option><option value="261">Zerobot</option></optgroup><optgroup label="Macquarie University"><option value="304">Macquarie University - Mortice05 Project</option></optgroup></select>
+			  </div>
+			</div>
+			<div class="row">
+			  <div id="task_times">
+				<div class="row">
+				  <div id="tasks_header" style="display:inherit;">
+					<div class="span1 offset4" id="day_label_monday"><h6 class="daytext">Mon</h6><h6 class="datetext"> 04/11</h6></div>
+					<div class="span1" id="day_label_tuesday"><h6 class="daytext">Tue</h6><h6 class="datetext"> 05/10</h6></div>
+					<div class="span1" id="day_label_wednesday"><h6 class="daytext">Wed</h6><h6 class="datetext"> 16/10</h6></div>
+					<div class="span1" id="day_label_thursday"><h6 class="daytext">Thu</h6><h6 class="datetext"> 17/10</h6></div>
+					<div class="span1" id="day_label_friday"><h6 class="daytext">Fri</h6><h6 class="datetext"> 18/10</h6></div>
+					<div class="span1" id="day_label_saturday"><h6 class="daytext">Sat</h6><h6 class="datetext"> 19/10</h6></div>
+					<div class="span1" id="day_label_sunday"><h6 class="daytext">Sun</h6><h6 class="datetext"> 20/10</h6></div>
+					<div class="span1" id="submit_label"><h6 class="daytext" style="margin-left: 50px">Submitted?</h6></div>
+				  </div>
+				</div>
+				<div class="row">
+				  <div id="tasks_container" style="clear:both;">
+				  <div class="project proj_id_304">
+		  <div class="row" style="padding-bottom: 15px">
+			<span class="project_title">Macquarie University - Mortice05 Project</span>
+			<span class="project_code" style="font-size:14px;">(Code: 306)</span>
+			<img alt="Group Approval Project" class="group_approval_image" src="assets/group_approval_icon-acb753540207aea179e829b12815f8ba.jpg" style="margin-left:10px;visibility:hidden;width:20px;" title="Group Approval Project">
+		  </div>
+		<div class="task row">
+		  <div class="task-title span4">
+			<select class="task_select" style="width:200px; display:inline-block;" name="times[][task_id]"><option value="755">Software Engineering Services</option></select>
+		  </div>
+		  <div class="days">
+		  <div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours1 current input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-21][hours]" type="text" value="0" size="1" maxlength="2" data-original-title="" title=""> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-21][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div>
+		<div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-22][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-22][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div>
+		<div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-23][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-23][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div>
+		<div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-24][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-24][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div>
+		<div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-25][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-25][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div>
+		<div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-26][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-26][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div><div class="day span1-no-margin">
+		  <div class="column" style="padding:0; margin 0; border 0;">
+			<div class="control-group" style="display:inline-block">
+				<input class="hours1 input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-27][hours]" type="text" value="0" size="1" maxlength="2"> :
+			</div>
+			<div class="control-group" style="display:inline-block">
+				<input class="minutes input-mini" onclick="selectTextboxContent(this);" name="times[][2013-10-27][minutes]" type="text" value="0" size="1" maxlength="2">
+			</div>
+		  </div>
+		</div></div>
+		  <!--div class="row_time_total span2-no-margin column task-total">0h 0m</div -->
+		<div class="submitted column last" style="padding-top:5px;"><img alt="Error-icon" class="error_icon" src="assets/error-icon-b058e1dc4cba66ff18829efbcb4b5d47.gif"></div></div></div></div>
+		</div>
+		<div class="row">
+		  <div id="tasks_footer">
+		  </div>
+		</div>
+	  </div>
+		</div>
+	</form>	
+</div>
+
 <div class="container  main-content">
 
   <form id="timesheet" method="post" action="http://timesheet.dius.com.au/timesheet/save">
@@ -135,7 +441,7 @@ Logout
         <div class="timesheet-date-range">
           <span title="Week starting: 21/10/2013">
             Oct 21 - 27, 2013
-            <p class="in-weeks">(this week)</p>
+            <p class="in-weeks">(last week)</p>
           </span>
           <!--the calendar picker needs to be replaced with a bootstrap version-->
         </div>
@@ -186,7 +492,7 @@ Logout
           <div class="project proj_id_304">
   <div class="row" style="padding-bottom: 15px">
     <span class="project_title">Macquarie University - Mortice05 Project</span>
-    (Code: <span class="project_code">306</span>)
+	<span class="project_code" style="font-size:14px;">(Code: 306)</span>
     <img alt="Group Approval Project" class="group_approval_image" src="assets/group_approval_icon-acb753540207aea179e829b12815f8ba.jpg" style="margin-left:10px;visibility:hidden;width:20px;" title="Group Approval Project">
   </div>
 <div class="task row">
@@ -268,16 +574,6 @@ Logout
         </div>
         <div class="row">
           <div id="tasks_footer">
-            <div id="total_time" class="calculated-times" style="display: block;">
-              <div class="col_time_total span1 offset4">&nbsp;</div>
-              <div class="col_time_total span1">&nbsp;</div>
-              <div class="col_time_total span1">&nbsp;</div>
-              <div class="col_time_total span1">&nbsp;</div>
-              <div class="col_time_total span1">&nbsp;</div>
-              <div class="col_time_total span1">&nbsp;</div>
-              <div class="col_time_total span1">&nbsp;</div>
-              <!--div class="grand_total span1 column">0h 0m</div-->
-            </div>
           </div>
         </div>
       </div>
@@ -324,12 +620,39 @@ Logout
 	<textarea class="comment" style="height: 180px;"></textarea>
 </div>
 
-<div id="approval_confirmation_dialog" class="template" title="Submit for approval">
-    <p>Select the projects that you want to submit timesheets for:</p>
-    <div id="project_list">
-        <!-- this is the placeholder for the dynamically generated list -->
+<div id="approve_dialog" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable" tabindex="-1" role="dialog"
+     aria-labelledby="ui-dialog-title-approval_confirmation_dialog"
+     style="display: block; z-index: 1002; outline: 0px; position: absolute; height: auto; width: 480px; top: 153px; left: 431px;">
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title"
+                                                                                            id="ui-dialog-title-approval_confirmation_dialog">Submit for approval</span><a
+            href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span
+            class="ui-icon ui-icon-closethick">close</span></a></div>
+    <div id="approval_confirmation_dialog" class="template ui-dialog-content ui-widget-content"
+         style="display: block; width: auto; min-height: 25.15999984741211px; height: auto;">
+        <p>Select the projects that you want to submit timesheets for:</p>
+
+        <div id="project_list"><input type="checkbox" checked="true" value="3" id="project_3">&nbsp;<label
+                for="project_3">Overheads</label><br><input type="checkbox" checked="true" value="304" id="project_304">&nbsp;<label
+                for="project_304">Macquarie University - Mortice05 Project</label><br></div>
+        <br>
     </div>
-    <br>
+    <div class="ui-resizable-handle ui-resizable-n"></div>
+    <div class="ui-resizable-handle ui-resizable-e"></div>
+    <div class="ui-resizable-handle ui-resizable-s"></div>
+    <div class="ui-resizable-handle ui-resizable-w"></div>
+    <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se ui-icon-grip-diagonal-se"
+         style="z-index: 1001;"></div>
+    <div class="ui-resizable-handle ui-resizable-sw" style="z-index: 1002;"></div>
+    <div class="ui-resizable-handle ui-resizable-ne" style="z-index: 1003;"></div>
+    <div class="ui-resizable-handle ui-resizable-nw" style="z-index: 1004;"></div>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+        <div class="ui-dialog-buttonset">
+            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    role="button"><span class="ui-button-text">Cancel</span></button>
+            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    role="button"><span class="ui-button-text">Submit Timesheet</span></button>
+        </div>
+    </div>
 </div>
 
 <span style="display:none" class="locked_controls template icon-lock icon-large timesheet-icon" rel="tooltip" data-placement="bottom" data-original-title="Locked" onclick="TE.unlock_task($(this).closest(&#39;.task&#39;));return false;"></span>
@@ -410,10 +733,26 @@ Logout
 			  
 			  var swiper = controller.gesture('swipe');
 			  var circler = controller.gesture('circle');
+			  var tapper = controller.gesture('screenTap');
+			  var keytapper = controller.gesture('keyTap');
 			  var previous_progress = 0;
 			  var last_swipe = null;
-			  var previous_swipe_timestamp = 0;
+			  var state = 'update';
+			  var previous_state = 'update';
+			  var page_state = 'none';
 			  
+			   tapper.update(function(g) {
+				   console.log('got tapped!');
+			   });
+			  
+			   keytapper.update(function(g) {
+				   console.log('got KEY tapped!');
+			   });
+			  
+			   //swiper.stop(function(g) {  THIS IS THE RIGHT way to do the listeners... 
+			   //  console.log('just got the STOP event for a swiper!!!');
+			   //});
+			   
 			   swiper.update(function(g) {
 					//console.log("we got a swiper! " + g);
 					var gest = g.lastGesture;
@@ -432,15 +771,8 @@ Logout
 					}
 					
 					var current_time = new Date().getTime();
-					//console.log("current: " + current_time);
-					//console.log("previous_swipe: " + previous_swipe_timestamp);
-					var diff = parseInt(current_time) - parseInt(previous_swipe_timestamp);
-					console.log("time between: " + diff);
-					previous_swipe_timestamp = current_time;
 					
-					if(gest.speed > 2000){
-						//console.log("above required speed!");
-     					//console.log("dur: " + gest.duration + " speed: " + gest.speed + " state: " + gest.state);
+					if(false && gest.speed > 2000){
 						if(g.lastGesture.direction[0] > 0){
 							console.log(">>> swipe >>>");
 							if(current_index < 6 && diff > 15){
@@ -461,6 +793,9 @@ Logout
 					}
 					
      			});	
+				
+			   var palm_velocity;
+			   var gestures_enabled = true;
 
                circler.update(function(g) {
 					//console.log("we got a CIRCLE!" + g);
@@ -488,43 +823,114 @@ Logout
 			  controller.loop(function(frame) {
 				latestFrame = frame;
 				
-				if(frame.gestures.length > 0){
+				//if(frame.gestures.length > 0){
 					//document.getElementById('out').innerHTML = "<div>" + latestFrame.gestures + "</div>";
+					//console.log("latest frame hands: " + latestFrame.hands[0].stabilizedPalmPosition.join(',   '));
+					//console.log("latest frame hands: " + latestFrame.hands[0].palmVelocity[1]);
+				//}
+				if(latestFrame.hands.length > 0){
+					palm_velocity = latestFrame.hands[0].palmVelocity[1];
+					//if(palm_velocity > 1500){
+					//	console.log("Palm went UP!!!!");
+					//}
+					if(palm_velocity < -3000 && gestures_enabled == true){
+						gestures_enabled = false; // prevent one after another gesture
+						//console.log("Palm went DOWWWWN!! " + palm_velocity);
+						console.log("SUBMIT TIMESHEEEET!");
+						console.log(' dialog currently: ' + $('#approve_dialog').css('display'));
+						if($('#approve_dialog').css('display') === 'block'){
+							window.location = "http://timesheet.dius.com.au";
+						}
+						setTimeout(enableGestures, 2000);
+						$('#approve_dialog').show();
+					}
 				}
 			  });
 			  
+			  function enableGestures(){
+				  console.log("enabled gestures again!!!!!!!!!!!!!!!!!");
+				  gestures_enabled = true;
+			  }
+			  
+			  var token = 0;
+			  
    			  controller.on('gesture', function (gesture) {
-				  if (gesture.type == 'swipe') {
-						if (gesture.state == 'stop') {
-							console.log("stopped!");
+			  
+  				//console.log('hi! t ' + gesture.type);
+				  if(gesture.type == 'screenTap'){
+						console.log("screen tapped pos: " + gesture.position);
+						if(gesture.position[0] > 0){
+							console.log("next week!");
+							if(page_state == 'none'){
+								page_state = 'next';
+								$('#next_pane').css('margin-left', '6%');
+							}else if(page_state == 'prev'){
+								$('#previous_pane').css('margin-left', '-102%');
+								page_state = 'none';
+							}
+						}else{
+							console.log("previous week!");
+							if(page_state == 'none'){
+								page_state = 'prev';
+								$('#previous_pane').css('margin-left', '6%');
+							}else if(page_state == 'next'){
+								$('#next_pane').css('margin-left', '102%');
+								page_state = 'none';
+							}
 						}
 				  }
+				  if (gesture.type == 'swipe') {
+						if (gesture.state == 'stop') {
+							//console.log("stopped!");
+							state = 'stop';
+
+							//console.log(" speed: " + gesture.speed + " id: " + gesture.id);
+							
+							// Interestingly - the right hand - swipes faster OUTWARDS - than inwards... 
+							// meaning that you need really two different thresholds here... 
+							
+							difference_between_token_and_current_id = parseInt(gesture.id) - parseInt(token);
+							//console.log("difference: " + difference_between_token_and_current_id);
+							
+							if(gesture.speed > 1000 && (difference_between_token_and_current_id > 3)){
+								if(gesture.direction[0] > 0){
+									//console.log(">>> swipe >>>");
+									if(current_index < 6){
+										current_index = current_index + 1;
+									}
+								}
+								else
+								{
+									//console.log("<<< swipe <<<");					
+									if(current_index > 0){
+										current_index = current_index - 1;
+									}
+								}
+								var element = getCurrentInput();
+								$('.hours').removeClass('current');
+								element.addClass('current');
+								console.log("current index: " + current_index);
+								token = parseInt(gesture.id);
+							}
+						}
+						//if (gesture.state == 'start') {
+						//	console.log("started!!!!");
+						//	state = 'start';
+						//}
+						//if(previous_state != state){
+						//	console.log("CHANGEEDDD!!");
+						//	
+						//}
+						previous_state = state;
+				  }
 			  });
+
+   			  $('#approve_dialog').hide();
 			  
-			  controller.on('ready', function() {
-				console.log("ready");
-			  });
-			  controller.on('connect', function() {
-				console.log("connect");
-			  });
-			  controller.on('disconnect', function() {
-				console.log("disconnect");
-			  });
-			  controller.on('focus', function() {
-				console.log("focus");
-			  });
-			  controller.on('blur', function() {
-				console.log("blur");
-			  });
-			  controller.on('deviceConnected', function() {
-				console.log("deviceConnected");
-			  });
-			  controller.on('deviceDisconnected', function() {
-				  console.log("deviceDisconnected");
-			  });
 		</script>
 
-    
-  
+</body></html>
 
-<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-message-dialog" style="display: none; z-index: 1000; outline: 0px;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title" id="ui-dialog-title-message-dialog">Info</span><a href="http://timesheet.dius.com.au/timesheet#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span class="ui-icon ui-icon-closethick">close</span></a></div><div id="message-dialog" class="ui-dialog-content ui-widget-content"></div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">OK</span></button></div></div></div><div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-confirm-dialog" style="display: none; z-index: 1000; outline: 0px;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title" id="ui-dialog-title-confirm-dialog">Confirm</span><a href="http://timesheet.dius.com.au/timesheet#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span class="ui-icon ui-icon-closethick">close</span></a></div><div id="confirm-dialog" class="ui-dialog-content ui-widget-content"></div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">OK</span></button><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">Cancel</span></button></div></div></div><div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-comment-dialog" style="display: none; z-index: 1000; outline: 0px;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title" id="ui-dialog-title-comment-dialog">Comments</span><a href="http://timesheet.dius.com.au/timesheet#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span class="ui-icon ui-icon-closethick">close</span></a></div><div id="comment-dialog" class="ui-dialog-content ui-widget-content"></div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">OK</span></button></div></div></div></body></html>
+
+
+
